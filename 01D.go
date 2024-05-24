@@ -3,19 +3,22 @@ package main
 import "fmt"
 
 func main() {
-	var count int
+	var n int
+	var maxv = -1000000000
 
-	fmt.Scanf("%d", &count)
-	arr := make([]int, count)
-	for i := 0; i < count; i++ {
-		fmt.Scanf("%d", &arr[i])
-	}
-	maxv := arr[1] - arr[0]
-
-	for j := 0; j < count-1; j++ {
-		for i := j + 1; i < count; i++ {
-			if arr[i]-arr[j] > maxv {
-				maxv = arr[i] - arr[j]
+	x := 0
+	fmt.Scan(&n)
+	for i := 0; i < n; i++ {
+		var a int
+		fmt.Scan(&a)
+		if i == 0 {
+			x = a
+		} else {
+			if maxv < a-x {
+				maxv = a - x
+			}
+			if x > a {
+				x = a
 			}
 		}
 	}
