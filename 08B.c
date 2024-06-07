@@ -77,7 +77,28 @@ void preorderTreeWalk(struct Node *u)
   preorderTreeWalk(u->left);
   preorderTreeWalk(u->right);
 }
-
+// 
+// findの実装
+// 
+struct Node *find(int k)
+{
+  struct Node *t = root;
+  while (t != NIL_NODE && t->key != k)
+  {
+    if (k < t->key)
+    {
+      t = t->left;
+    }
+    else
+    {
+      t = t->right;
+    }
+  }
+  return t;
+}
+//
+// main関数
+//
 int main(){
   int n, i, x;
   char com[20];
