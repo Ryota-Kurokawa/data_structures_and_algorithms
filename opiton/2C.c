@@ -1,79 +1,125 @@
-#include<stdio.h>
-// 
-// selection sort algorithm
-//
-int selectionSort(int numOfElement, int elementsArr[]){
-  int i, j, minIndex, temp, countOfSwap = 0;
-  for(i = 0; i < numOfElement - 1; i++){
-    minIndex = i;
-    for(j = i + 1; j < numOfElement; j++){
-      if(elementsArr[j] < elementsArr[minIndex]){
-        minIndex = j;
+#include <stdio.h>
+#include <string.h>
+
+typedef struct
+{
+  char suit;
+  int value;
+} Card;
+
+void bubbleSort(Card C[], int N)
+{
+  int i, j;
+  for (i = 0; i < N; i++)
+  {
+    for (j = N - 1; j > i; j--)
+    {
+      if (C[j].value < C[j - 1].value)
+      {
+        Card temp = C[j];
+        C[j] = C[j - 1];
+        C[j - 1] = temp;
       }
     }
-    if(minIndex != i){
-      temp = elementsArr[i];
-      elementsArr[i] = elementsArr[minIndex];
-      elementsArr[minIndex] = temp;
-      countOfSwap++;
-    }
   }
-  return countOfSwap;
 }
 
-// 
-// Bubble sort algorithm
-//
-int bubbleSort(int numOfElement, int elementsArr[]){
-  int i, j, temp, countOfSwap = 0;
-  for(i = 0; i < numOfElement - 1; i++){
-    for(j = 0; j < numOfElement - i - 1; j++){
-      if(elementsArr[j] > elementsArr[j + 1]){
-        temp = elementsArr[j];
-        elementsArr[j] = elementsArr[j + 1];
-        elementsArr[j + 1] = temp;
-        countOfSwap++;
+void selectionSort(Card C[], int N)
+{
+  int i, j, minj;
+  for (i = 0; i < N; i++)
+  {
+    minj = i;
+    for (j = i; j < N; j++)
+    {
+      if (C[j].value < C[minj].value)
+      {
+        minj = j;
+      }
+    }
+    if (minj != i)
+    {
+      Card temp = C[i];
+      C[i] = C[minj];
+      C[minj] = temp;
+    }
+  }
+}
+
+int isStable(Card original[], Card sorted[], int N)
+{
+  int i, j;
+  for (i = 0; i < N; i++)
+  {
+    for (j = i + 1; j < N; j++)
+    {
+      if (sorted[i].value == sorted[j].value)
+      {
+        int k, l;
+        for (k = 0; k < N; k++)
+        {
+          if (original[k].suit == sorted[i].suit && original[k].value == sorted[i].value)
+          {
+            break;
+          }
+        }
+        for (l = k + 1; l < N; l++)
+        {
+          if (original[l].suit == sorted[j].suit && original[l].value == sorted[j].value)
+          {
+            break;
+          }
+        }
+        if (l < k)
+        {
+          return 0;
+        }
       }
     }
   }
-  return countOfSwap;
+  return 1;
+}
+
+void printCards(Card C[], int N)
+{
+  int i;
+  for (i = 0; i < N; i++)
+  {
+    printf("%c%d", C[i].suit, C[i].value);
+    if (i < N - 1)
+    {
+      printf(" ");
+    }
+  }
+  printf("\n");
 }
 
 int main()
 {
-  // 配列の要素数を取得
-  int numOfElement;
-  scanf("%d", &numOfElement);
+  int N, i;
+  scanf("%d", &N);
 
-  // 配列の要素を取得
-  int elementsArr[numOfElement];
-  for(int i = 0; i < numOfElement; i++){
-    scanf("%d", &elementsArr[i]);
+  Card original[N], bubbleSorted[N], selectionSorted[N];
+
+  for (i = 0; i < N; i++)
+  {
+    char suit;
+    int value;
+    scanf(" %c%d", &suit, &value);
+    original[i].suit = suit;
+    original[i].value = value;
+    bubbleSorted[i] = original[i];
+    selectionSorted[i] = original[i];
   }
 
-  // バブルソートを実行し、スワップ回数を取得
-  int countOfSwap = bubbleSort(numOfElement, elementsArr);
+  bubbleSort(bubbleSorted, N);
+  selectionSort(selectionSorted, N);
 
-  for(int i = 0; i < numOfElement; i++){
-    printf("%d", elementsArr[i]);
-    if(i != numOfElement - 1){
-      printf(" ");
-    }
-  }
-  printf("\n");
-  printf("%d\n", countOfSwap);
+  printCards(bubbleSorted, N);
+  printf("%s\n", isStable(original, bubbleSorted, N) ? "Stable\n" : "Not stable\n");
 
-  // バブルソートを実行し、スワップ回数を取得
-  countOfSwap = selectionSort(numOfElement, elementsArr);
+  printCards(selectionSorted, N);
+  printf("%s\n", isStable(original, selectionSorted, N) ? "Stable\n" : "Not stable\n");
 
-  for(int i = 0; i < numOfElement; i++){
-    printf("%d", elementsArr[i]);
-    if(i != numOfElement - 1){
-      printf(" ");
-    }
-  }
-  printf("\n");
-  printf("%d\n", countOfSwap);
-  
   return 0;
 }

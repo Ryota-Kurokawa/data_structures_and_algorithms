@@ -1,6 +1,5 @@
 #include<stdio.h>
 
-
 int search(int A[], int n, int key){
   int i = 0;
   A[n] = key;
